@@ -1,0 +1,513 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101713">
+<title>REVIVE — Your 90-Day Journey</title>
+<style>
+:root {
+  --bg:#101713;--panel:#18221d;--panel2:#202c25;
+  --green:#55d6a0;--green2:#2d9d72;--text:#edf5ef;
+  --muted:#9aaba0;--line:#2b3931;--red:#e58c8c;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,sans-serif}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+.app{max-width:760px;margin:auto;padding:22px 18px 105px}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}
+.logo{font-size:27px;font-weight:900;letter-spacing:3px}
+.logo span{color:var(--green)}
+.eyebrow{font-size:10px;letter-spacing:2px;color:var(--muted);font-weight:700}
+.date{font-size:13px;color:var(--muted);margin-top:5px}
+.page{display:none;animation:fade .2s ease}
+.page.active{display:block}
+@keyframes fade{from{opacity:.5;transform:translateY(4px)}to{opacity:1;transform:none}}
+h1{font-size:29px;letter-spacing:-1px;margin:8px 0}
+h2{font-size:19px;margin:0 0 14px}
+h3{font-size:15px;margin:0 0 10px}
+p{line-height:1.55}
+.muted{color:var(--muted)}
+.small{font-size:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:19px;padding:18px;margin:13px 0}
+.hero{background:linear-gradient(135deg,#1c3328,#17231c);border-color:#315441}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.score{font-size:39px;font-weight:850;letter-spacing:-2px;margin:8px 0 0}
+.score span{font-size:15px;color:var(--green);letter-spacing:0}
+.pill{border:1px solid #3b6650;color:var(--green);border-radius:30px;padding:6px 10px;font-size:11px;font-weight:750}
+.bar{height:7px;background:#2a382f;border-radius:20px;overflow:hidden;margin:13px 0}
+.bar span{height:100%;display:block;background:var(--green);border-radius:20px;transition:width .2s}
+.quote{font-size:14px;color:#d1e3d7;font-style:italic;margin-top:15px}
+.habit{display:flex;gap:13px;align-items:flex-start;padding:15px 0;border-bottom:1px solid var(--line)}
+.habit:last-child{border:0}
+.habit input{width:21px;height:21px;accent-color:var(--green);flex-shrink:0;margin-top:2px}
+.habit strong{font-size:14px;display:block;line-height:1.4}
+.habit small{color:var(--muted);display:block;margin-top:4px;line-height:1.45}
+.xp{margin-left:auto;color:var(--green);font-size:12px;white-space:nowrap}
+.btn{background:var(--green);color:#102017;border:0;border-radius:11px;padding:11px 15px;font-weight:800}
+.btn.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}
+.btn.danger{color:var(--red);background:#332020;border:1px solid #593333}
+.btn.smallbtn{padding:8px 10px;font-size:12px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:15px}
+.stat strong{font-size:23px;display:block;margin:7px 0}
+.stat small{color:var(--muted);font-size:11px}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#121a15ed;backdrop-filter:blur(15px);border-top:1px solid var(--line);display:flex;justify-content:center;z-index:5;padding:9px 4px calc(9px + env(safe-area-inset-bottom))}
+.nav button{background:none;border:0;color:var(--muted);font-size:10px;padding:7px 3px;flex:1;max-width:145px}
+.nav button span{display:block;font-size:18px;margin-bottom:4px}
+.nav button.active{color:var(--green)}
+input[type=text],input[type=date],textarea{background:#111a14;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:11px;width:100%;outline:none}
+textarea{min-height:105px;resize:vertical}
+.field{margin:12px 0}
+.field label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
+.rank{padding:14px 0;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:center}
+.rank:last-child{border:0}
+.medal{font-size:23px}
+.rank small{display:block;color:var(--muted);margin-top:4px}
+.rank .pill{margin-left:auto}
+.chart{display:flex;align-items:end;gap:8px;height:155px;border-bottom:1px solid var(--line);padding:10px 0}
+.barcol{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:end;height:100%;gap:5px;min-width:0}
+.barcol i{width:min(100%,30px);background:linear-gradient(#65e1ac,#258b62);border-radius:6px 6px 2px 2px;min-height:2px}
+.barcol small{font-size:10px;color:var(--muted)}
+.empty{text-align:center;color:var(--muted);padding:20px;font-size:13px}
+hr{border:0;border-top:1px solid var(--line);margin:16px 0}
+a{color:var(--green)}
+@media(min-width:600px){.app{padding-top:30px}.grid.four{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div>
+    <div class="logo">REVIVE<span>.</span></div>
+    <div class="eyebrow">YOUR PERSONAL JOURNEY</div>
+  </div>
+  <div class="pill">90 DAYS</div>
+</header>
+
+<!-- TODAY -->
+<section class="page active" id="today">
+  <div class="eyebrow">YOUR DAY, YOUR CHOICE</div>
+  <h1 id="todayDate">Today</h1>
+  <p class="muted small">Small actions. Meaningful progress.</p>
+
+  <div class="card hero">
+    <div class="row">
+      <div class="eyebrow">TODAY'S PROGRESS</div>
+      <span class="pill" id="completedLabel">0 completed</span>
+    </div>
+    <div class="score" id="todayXP">0 <span>XP</span></div>
+    <div class="muted small" id="maxXP">out of 80 XP</div>
+    <div class="bar"><span id="todayBar" style="width:0%"></span></div>
+    <div class="row small muted"><span id="percent">0% complete</span><span id="habitCount">0 habits</span></div>
+    <div class="quote" id="dailyQuote"></div>
+  </div>
+
+  <div class="card">
+    <div class="row">
+      <h2>Today's habits</h2>
+      <button class="btn secondary smallbtn" onclick="manageHabits()">Edit habits</button>
+    </div>
+    <div id="habitList"></div>
+    <div class="actions">
+      <button class="btn" onclick="saveToday()">Save today's progress</button>
+      <button class="btn secondary" onclick="clearToday()">Clear checks</button>
+    </div>
+    <p class="muted small">Each completed habit earns 10 XP. Your daily maximum changes when you add or remove habits.</p>
+  </div>
+</section>
+
+<!-- PROGRESS -->
+<section class="page" id="progress">
+  <div class="eyebrow">YOUR PERSONAL ANALYTICS</div>
+  <h1>Progress</h1>
+  <p class="muted small">Look back. Learn. Keep moving forward.</p>
+  <div class="grid four">
+    <div class="stat"><small>TOTAL XP</small><strong id="totalXP">0</strong></div>
+    <div class="stat"><small>CHECK-INS</small><strong id="checkins">0</strong></div>
+    <div class="stat"><small>AVERAGE XP</small><strong id="averageXP">0</strong></div>
+    <div class="stat"><small>BEST DAY</small><strong id="bestDay">—</strong></div>
+  </div>
+  <div class="card">
+    <h2>Daily XP</h2>
+    <div class="chart" id="chart"></div>
+    <p class="muted small">Your latest seven saved days.</p>
+  </div>
+  <div class="card">
+    <h2>Habit consistency</h2>
+    <div id="consistency"></div>
+  </div>
+  <div class="card">
+    <h2>Recent check-ins</h2>
+    <div id="recentDays"></div>
+  </div>
+</section>
+
+<!-- RANKS -->
+<section class="page" id="ranks">
+  <div class="eyebrow">THE 90-DAY JOURNEY</div>
+  <h1>Your ranks</h1>
+  <div class="card hero">
+    <div class="eyebrow">CURRENT RANK</div>
+    <h1 id="currentRank">🥉 Bronze</h1>
+    <p class="muted small" id="journeyDay">Journey day 1 of 90</p>
+    <div class="bar"><span id="journeyBar"></span></div>
+    <div class="row small"><span id="journeyPercent">0% complete</span><span id="nextRank">Next: Silver</span></div>
+    <hr>
+    <div class="field">
+      <label for="startDate">Your journey start date</label>
+      <input type="date" id="startDate" onchange="changeStartDate()">
+    </div>
+    <p class="muted small">Ranks are based on elapsed calendar days, not XP or perfect streaks. Missing a day never resets your journey.</p>
+  </div>
+  <div class="card">
+    <h2>Milestone timeline</h2>
+    <div id="rankList"></div>
+  </div>
+</section>
+
+<!-- SUPPORT -->
+<section class="page" id="support">
+  <div class="eyebrow">A MOMENT TO RESET</div>
+  <h1>Support</h1>
+  <p class="muted">A difficult moment doesn't erase your progress. Pause and choose your next helpful step.</p>
+  <div class="card">
+    <h2>Take a short pause</h2>
+    <p class="muted small">Try a calm breathing break. Breathe comfortably; don't force or hold your breath.</p>
+    <div class="score" id="timerDisplay">01:00</div>
+    <div class="actions">
+      <button class="btn" id="timerButton" onclick="startTimer()">Start 1-minute pause</button>
+      <button class="btn secondary" onclick="resetTimer()">Reset</button>
+    </div>
+  </div>
+  <div class="card">
+    <h2>What would help right now?</h2>
+    <div id="supportChoices">
+      <button class="btn secondary" onclick="chooseSupport('Take a short walk')">Take a short walk</button>
+      <button class="btn secondary" onclick="chooseSupport('Move to a different space')">Change my surroundings</button>
+      <button class="btn secondary" onclick="chooseSupport('Drink some water')">Drink some water</button>
+      <button class="btn secondary" onclick="chooseSupport('Talk to someone I trust')">Talk to someone I trust</button>
+      <button class="btn secondary" onclick="chooseSupport('Rest without judging myself')">Take some rest</button>
+    </div>
+    <p id="supportMessage" class="muted small"></p>
+  </div>
+  <div class="card">
+    <h2>Check in with yourself</h2>
+    <textarea id="supportNote" placeholder="What's on your mind? What might help?"></textarea>
+    <button class="btn secondary" onclick="saveSupport()">Save private check-in</button>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="page" id="experience">
+  <div class="eyebrow">YOUR STORY</div>
+  <h1>Experience</h1>
+  <p class="muted">A private space for your reasons, reflections and lessons.</p>
+  <div class="card">
+    <h2>Your Why</h2>
+    <p class="muted small">What made you begin this journey?</p>
+    <textarea id="yourWhy" placeholder="I started REVIVE because..."></textarea>
+    <button class="btn secondary" onclick="saveWhy()">Save my reason</button>
+  </div>
+  <div class="card">
+    <h2>Daily reflection</h2>
+    <p class="muted small">Write one thing that went well and one thing you learned.</p>
+    <textarea id="reflection" placeholder="Today I learned..."></textarea>
+    <button class="btn" onclick="saveReflection()">Save reflection</button>
+  </div>
+  <div class="card">
+    <h2>Your reflections</h2>
+    <div id="reflectionHistory"></div>
+  </div>
+  <div class="card">
+    <h2>Day 90 reflection</h2>
+    <textarea id="finalReflection" placeholder="What has this journey taught me?"></textarea>
+    <button class="btn secondary" onclick="saveFinal()">Save Day 90 reflection</button>
+  </div>
+  <div class="card">
+    <h2>Your data</h2>
+    <p class="muted small">Your records are stored in this browser on this device. They are not uploaded to a server.</p>
+    <div class="actions">
+      <button class="btn secondary" onclick="exportData()">Export backup</button>
+      <button class="btn secondary" onclick="document.getElementById('importFile').click()">Restore backup</button>
+      <input type="file" id="importFile" accept="application/json" hidden onchange="importData(event)">
+    </div>
+  </div>
+</section>
+</div>
+
+<nav class="nav">
+  <button class="active" data-page="today" onclick="showPage('today',this)"><span>◉</span>Today</button>
+  <button data-page="progress" onclick="showPage('progress',this)"><span>▥</span>Progress</button>
+  <button data-page="ranks" onclick="showPage('ranks',this)"><span>◇</span>Ranks</button>
+  <button data-page="support" onclick="showPage('support',this)"><span>♡</span>Support</button>
+  <button data-page="experience" onclick="showPage('experience',this)"><span>✧</span>Experience</button>
+</nav>
+
+<script>
+const STORE="revive2Data";
+const DEFAULT_HABITS=[
+["h1","1. Self-control & mindful choices","Practise choices and boundaries that support your goals."],
+["h2","2. Regular balanced meals & hydration","Eat regularly and drink water; no fasting or skipped meals."],
+["h3","3. Resistance training OR planned recovery","Train safely, or count a planned recovery day."],
+["h4","4. Walking / enjoyable daily movement","Choose comfortable movement you enjoy."],
+["h5","5. Protein + healthy fats","Include nourishing sources in balanced meals."],
+["h6","6. Sleep 8–10 hours","Give your body enough time to rest and grow."],
+["h7","7. Safe outdoor time","Enjoy outdoors safely; avoid sunburn and use protection."],
+["h8","8. Mostly nourishing foods","Choose nourishing foods often; treats are okay too."]
+];
+const QUOTES=[
+"Consistency is built through small choices.",
+"Progress takes patience. Keep showing up.",
+"You can begin again without judging yesterday.",
+"Discipline is choosing what matters over what is easy.",
+"One thoughtful decision can change the direction of a day.",
+"Respect your progress, even when it feels slow.",
+"Small steps still move you forward.",
+"Rest is part of a sustainable journey.",
+"Your next choice matters more than a perfect record.",
+"Keep your promises to yourself, one day at a time."
+];
+const LEVELS=[
+[1,"🥉","Bronze","The beginning"],
+[11,"🥈","Silver","Building consistency"],
+[26,"🥇","Gold","Growing stronger"],
+[41,"💠","Platinum","A steady commitment"],
+[56,"💎","Diamond","A lasting practice"],
+[71,"👑","Master","A remarkable journey"],
+[90,"✦","Conquered","You reached Day 90"]
+];
+function freshData(){
+ return {habits:DEFAULT_HABITS.map(h=>({id:h[0],name:h[1],desc:h[2],active:true})),days:{},startDate:localDate(),why:"",reflections:{},support:{},finalReflection:""};
+}
+function localDate(d=new Date()){
+ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+function readData(){
+ try{
+  const d=JSON.parse(localStorage.getItem(STORE));
+  if(d&&d.habits&&d.days)return {...freshData(),...d};
+ }catch(e){}
+ return freshData();
+}
+let db=readData();
+let checks={};
+let timerInterval=null;
+let seconds=60;
+function saveDB(){localStorage.setItem(STORE,JSON.stringify(db))}
+function appDay(){
+ const d=new Date();
+ if(d.getHours()<6)d.setDate(d.getDate()-1);
+ return localDate(d);
+}
+function dateText(key){
+ return new Date(key+"T12:00:00").toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+}
+function activeHabits(){return db.habits.filter(h=>h.active)}
+function todayRecord(){return db.days[appDay()]}
+function getChecks(){
+ const saved=todayRecord();
+ checks=saved?{...saved.checks}:{};
+ activeHabits().forEach(h=>{if(checks[h.id]===undefined)checks[h.id]=false});
+}
+function currentScore(){
+ const list=activeHabits();
+ const done=list.filter(h=>checks[h.id]).length;
+ return {done,xp:done*10,max:list.length*10};
+}
+function quoteForToday(){
+ const key=appDay().replaceAll("-","");
+ const n=Number(key)%QUOTES.length;
+ return QUOTES[n];
+}
+function renderToday(){
+ const key=appDay(),s=currentScore();
+ document.getElementById("todayDate").textContent=dateText(key);
+ document.getElementById("todayXP").innerHTML=s.xp+' <span>XP</span>';
+ document.getElementById("maxXP").textContent="out of "+s.max+" XP";
+ document.getElementById("completedLabel").textContent=s.done+" completed";
+ document.getElementById("habitCount").textContent=activeHabits().length+" habits";
+ const pct=s.max?Math.round(s.xp/s.max*100):0;
+ document.getElementById("todayBar").style.width=pct+"%";
+ document.getElementById("percent").textContent=pct+"% complete";
+ document.getElementById("dailyQuote").textContent="“"+quoteForToday()+"”";
+ document.getElementById("habitList").innerHTML=activeHabits().map(h=>`
+ <label class="habit">
+ <input type="checkbox" ${checks[h.id]?"checked":""} onchange="toggleHabit('${h.id}',this.checked)">
+ <div><strong>${escapeHTML(h.name)}</strong><small>${escapeHTML(h.desc)}</small></div>
+ <span class="xp">+10 XP</span>
+ </label>`).join("")||'<div class="empty">No active habits. Add one using Edit habits.</div>';
+}
+function toggleHabit(id,value){checks[id]=value;renderToday()}
+function saveToday(){
+ const list=activeHabits(),s=currentScore(),old=todayRecord();
+ db.days[appDay()]={checks:{...checks},done:s.done,xp:s.xp,max:s.max,
+ labels:list.map(h=>({id:h.id,name:h.name,done:!!checks[h.id]})),
+ updatedAt:new Date().toISOString()};
+ saveDB();renderAll();alert("Today's progress saved.");
+}
+function clearToday(){
+ if(!confirm("Clear today's checks? Your other saved days will remain."))return;
+ checks={};activeHabits().forEach(h=>checks[h.id]=false);renderToday();
+}
+function manageHabits(){
+ const action=prompt("Edit habits:\n1 = Add a habit\n2 = Rename a habit\n3 = Delete a habit\n4 = Restore original eight\n\nEnter 1, 2, 3 or 4:");
+ if(action==="1"){
+  const name=prompt("New habit name:");
+  if(!name||!name.trim())return;
+  const desc=prompt("Short description (optional):")||"";
+  db.habits.push({id:"h"+Date.now(),name:name.trim(),desc,active:true});
+ }else if(action==="2"){
+  const list=activeHabits();
+  const number=prompt(list.map((h,i)=>(i+1)+". "+h.name).join("\n")+"\n\nWhich habit number?");
+  const h=list[Number(number)-1];if(!h)return;
+  const name=prompt("New name:",h.name);if(name&&name.trim())h.name=name.trim();
+  const desc=prompt("New description:",h.desc);if(desc!==null)h.desc=desc;
+ }else if(action==="3"){
+  const list=activeHabits();
+  const number=prompt(list.map((h,i)=>(i+1)+". "+h.name).join("\n")+"\n\nWhich habit number should be removed?");
+  const h=list[Number(number)-1];if(!h)return;
+  if(confirm("Remove "+h.name+" from future checklists? Past records will be kept."))h.active=false;
+ }else if(action==="4"){
+  if(confirm("Restore the original eight habits? Existing habits and saved history will remain.")){
+   DEFAULT_HABITS.forEach(d=>{
+    let h=db.habits.find(x=>x.id===d[0]);
+    if(h){h.name=d[1];h.desc=d[2];h.active=true}
+    else db.habits.push({id:d[0],name:d[1],desc:d[2],active:true});
+   });
+  }
+ }else return;
+ saveDB();getChecks();renderAll();
+}
+function showPage(id,button){
+ document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));
+ document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b===button));
+ if(id==="progress")renderProgress();
+ if(id==="ranks")renderRanks();
+ if(id==="experience")renderExperience();
+}
+function renderProgress(){
+ const entries=Object.entries(db.days).sort((a,b)=>a[0].localeCompare(b[0]));
+ const total=entries.reduce((s,[k,v])=>s+(Number(v.xp)||0),0);
+ const avg=entries.length?Math.round(total/entries.length):0;
+ const best=entries.length?Math.max(...entries.map(([k,v])=>Number(v.xp)||0)):0;
+ document.getElementById("totalXP").textContent=total;
+ document.getElementById("checkins").textContent=entries.length;
+ document.getElementById("averageXP").textContent=avg;
+ document.getElementById("bestDay").textContent=entries.length?best+" XP":"—";
+ const recent=entries.slice(-7);
+ const max=Math.max(10,...recent.map(([k,v])=>Number(v.max)||80));
+ document.getElementById("chart").innerHTML=recent.length?recent.map(([k,v])=>`
+ <div class="barcol"><small>${v.xp||0}</small><i style="height:${Math.max(3,(v.xp||0)/max*100)}%"></i><small>${k.slice(5)}</small></div>`).join(""):'<div class="empty">Your chart will appear after your first saved check-in.</div>';
+ const habits=db.habits;
+ document.getElementById("consistency").innerHTML=habits.map(h=>{
+  const records=entries.filter(([k,v])=>(v.labels||[]).some(x=>x.id===h.id));
+  const done=records.filter(([k,v])=>(v.labels||[]).some(x=>x.id===h.id&&x.done)).length;
+  const pct=records.length?Math.round(done/records.length*100):0;
+  return `<div style="margin:13px 0"><div class="row small"><strong>${escapeHTML(h.name)}</strong><span class="muted">${pct}%</span></div><div class="bar"><span style="width:${pct}%"></span></div></div>`;
+ }).join("");
+ document.getElementById("recentDays").innerHTML=entries.length?entries.slice(-8).reverse().map(([k,v])=>`
+ <div class="row" style="padding:10px 0;border-bottom:1px solid var(--line)">
+ <span class="small">${dateText(k)}</span><strong>${v.xp||0} XP</strong></div>`).join(""):'<div class="empty">No saved days yet.</div>';
+}
+function journeyDay(){
+ const start=new Date((db.startDate||localDate())+"T12:00:00");
+ const today=new Date(appDay()+"T12:00:00");
+ return Math.max(1,Math.floor((today-start)/86400000)+1);
+}
+function currentLevel(day){
+ let level=LEVELS[0];
+ LEVELS.forEach(r=>{if(day>=r[0])level=r});
+ return level;
+}
+function renderRanks(){
+ const day=journeyDay(),level=currentLevel(day),next=LEVELS.find(r=>r[0]>day);
+ document.getElementById("currentRank").textContent=level[1]+" "+level[2];
+ document.getElementById("journeyDay").textContent="Journey day "+day+" of 90";
+ document.getElementById("journeyBar").style.width=Math.min(100,day/90*100)+"%";
+ document.getElementById("journeyPercent").textContent=Math.min(100,Math.round(day/90*100))+"% complete";
+ document.getElementById("nextRank").textContent=next?"Next: "+next[2]:"Journey completed";
+ document.getElementById("startDate").value=db.startDate||localDate();
+ document.getElementById("rankList").innerHTML=LEVELS.map(r=>`
+ <div class="rank"><span class="medal">${r[1]}</span><div><strong>${r[2]}</strong><small>Day ${r[0]} · ${r[3]}</small></div>${day>=r[0]?'<span class="pill">REACHED</span>':""}</div>`).join("");
+}
+function changeStartDate(){
+ const value=document.getElementById("startDate").value;
+ if(!value)return;
+ if(value>appDay()){alert("Choose today or an earlier date.");renderRanks();return}
+ db.startDate=value;saveDB();renderRanks();
+}
+function chooseSupport(text){
+ document.getElementById("supportMessage").textContent="Your next step: "+text+". Take it one moment at a time.";
+}
+function startTimer(){
+ if(timerInterval)return;
+ document.getElementById("timerButton").textContent="Pause timer";
+ timerInterval=setInterval(()=>{
+  seconds--;document.getElementById("timerDisplay").textContent="00:"+String(Math.max(0,seconds)).padStart(2,"0");
+  if(seconds<=0){clearInterval(timerInterval);timerInterval=null;document.getElementById("timerButton").textContent="Start again";alert("Your pause is complete. Choose what would help next.");}
+ },1000);
+ document.getElementById("timerButton").onclick=pauseTimer;
+}
+function pauseTimer(){
+ if(timerInterval){clearInterval(timerInterval);timerInterval=null;document.getElementById("timerButton").textContent="Resume timer";document.getElementById("timerButton").onclick=startTimer;}
+}
+function resetTimer(){
+ if(timerInterval)clearInterval(timerInterval);
+ timerInterval=null;seconds=60;
+ document.getElementById("timerDisplay").textContent="01:00";
+ document.getElementById("timerButton").textContent="Start 1-minute pause";
+ document.getElementById("timerButton").onclick=startTimer;
+}
+function saveSupport(){
+ db.support[appDay()]=document.getElementById("supportNote").value;
+ saveDB();alert("Your private check-in has been saved.");
+}
+function saveWhy(){db.why=document.getElementById("yourWhy").value;saveDB();alert("Your reason has been saved.")}
+function saveReflection(){
+ const value=document.getElementById("reflection").value;
+ if(!value.trim())return alert("Write a reflection first.");
+ db.reflections[appDay()]=value;saveDB();renderExperience();alert("Reflection saved.");
+}
+function saveFinal(){db.finalReflection=document.getElementById("finalReflection").value;saveDB();alert("Your Day 90 reflection has been saved.")}
+function renderExperience(){
+ document.getElementById("yourWhy").value=db.why||"";
+ document.getElementById("reflection").value=db.reflections[appDay()]||"";
+ document.getElementById("finalReflection").value=db.finalReflection||"";
+ const entries=Object.entries(db.reflections).sort((a,b)=>b[0].localeCompare(a[0]));
+ document.getElementById("reflectionHistory").innerHTML=entries.length?entries.map(([k,v])=>`
+ <div style="padding:12px 0;border-bottom:1px solid var(--line)"><div class="eyebrow">${k}</div><p class="small">${escapeHTML(v)}</p></div>`).join(""):'<div class="empty">Your saved reflections will appear here.</div>';
+}
+function exportData(){
+ const blob=new Blob([JSON.stringify(db,null,2)],{type:"application/json"});
+ const url=URL.createObjectURL(blob),a=document.createElement("a");
+ a.href=url;a.download="revive-backup.json";a.click();URL.revokeObjectURL(url);
+}
+function importData(event){
+ const file=event.target.files[0];if(!file)return;
+ const reader=new FileReader();
+ reader.onload=()=>{
+  try{
+   const d=JSON.parse(reader.result);
+   if(!d.habits||!d.days)throw new Error();
+   if(!confirm("Replace the current REVIVE data with this backup?"))return;
+   db={...freshData(),...d};saveDB();getChecks();renderAll();alert("Backup restored.");
+  }catch(e){alert("That backup file could not be read.");}
+ };
+ reader.readAsText(file);
+}
+function escapeHTML(s){
+ return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function renderAll(){
+ renderToday();renderProgress();renderRanks();renderExperience();
+}
+getChecks();
+renderAll();
+document.getElementById("supportNote").value=db.support[appDay()]||"";
+</script>
+</body>
+</html>
