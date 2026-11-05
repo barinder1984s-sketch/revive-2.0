@@ -1,0 +1,545 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07110e">
+<link rel="manifest" href="manifest.json">
+<title>REVIVE 2.0</title>
+
+<style>
+:root{--bg:#0b111b;--panel:#141e2d;--panel2:#1b293c;--line:#2b3a50;--txt:#f3f6fb;--muted:#9eacbf;--green:#55d6a6;--gold:#f0c66d;--blue:#8db9ff}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top,#17263a 0,#0b111b 58%);color:var(--txt);font:15px system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:900px;margin:auto;padding:22px 15px 55px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.brand{font-size:2.2rem;letter-spacing:.18em;font-weight:950}
+.tag{font-size:.72rem;letter-spacing:.12em;color:var(--green);font-weight:800}
+.sub{color:var(--muted);margin:3px 0 0}
+nav{display:flex;gap:8px;overflow:auto;padding:4px 0 13px;position:sticky;top:0;background:#0b111beF;z-index:3}
+nav button{white-space:nowrap;background:#1b293c;color:var(--muted);border:1px solid var(--line);border-radius:30px;padding:10px 15px;font-weight:750}
+nav button.active{background:var(--green);color:#07150f;border-color:var(--green)}
+section.page{display:none}
+section.page.active{display:block}
+.card{background:linear-gradient(145deg,#172437,#121c2a);border:1px solid var(--line);border-radius:20px;padding:17px;margin:13px 0;box-shadow:0 12px 30px #0002}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.stat{background:#0e1826;border:1px solid var(--line);border-radius:15px;padding:13px}
+.stat small{color:var(--muted);display:block}
+.stat strong{font-size:1.55rem;display:block;margin-top:4px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.muted,small{color:var(--muted)}
+.big{font-size:2.1rem;font-weight:900;color:var(--green)}
+h2{font-size:1.15rem;margin:0 0 13px}
+h3{margin:0 0 10px}
+.bar{height:10px;background:#2b394c;border-radius:20px;overflow:hidden;margin:9px 0}
+.bar span{display:block;height:100%;background:linear-gradient(90deg,#39bd91,#9be8c8);width:0;transition:width .2s}
+.quest{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.quest:last-child{border:0}
+.quest input{width:22px;height:22px;accent-color:var(--green);flex-shrink:0;margin-top:2px}
+.quest strong{display:block}
+.quest small{display:block;line-height:1.4;margin-top:3px}
+button{cursor:pointer;border:0;border-radius:12px;padding:11px 14px;background:var(--green);color:#07150f;font-weight:850}
+button.secondary{background:#29384e;color:var(--txt);border:1px solid #3a4b64}
+button:disabled{opacity:.45}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+.rankrow{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.rankrow:last-child{border:0}
+.medal{font-size:1.5rem}
+.rankrow small{display:block}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+th,td{text-align:left;padding:10px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--muted)}
+.tablewrap{overflow-x:auto}
+select,input[type=date],textarea{background:#0c1624;color:var(--txt);border:1px solid var(--line);padding:10px;border-radius:10px;font:inherit}
+textarea{width:100%;min-height:75px;resize:vertical}
+.note{font-size:.83rem;line-height:1.5;color:var(--muted)}
+.pill{border:1px solid #42634f;color:#a9f2d0;border-radius:30px;padding:5px 9px;font-size:.75rem;font-weight:800}
+.chart{display:flex;align-items:end;gap:7px;height:145px;padding:10px 2px 0;border-bottom:1px solid var(--line)}
+.barcol{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:end;align-items:center;height:100%;gap:5px}
+.barcol span{width:min(100%,32px);background:linear-gradient(#71e0b5,#299b78);border-radius:7px 7px 2px 2px;min-height:2px}
+.barcol small{font-size:.68rem;white-space:nowrap}
+.empty{color:var(--muted);text-align:center;padding:20px}
+@media(min-width:680px){main{padding:28px 22px 60px}.twocol{display:grid;grid-template-columns:1.1fr .9fr;gap:13px}.twocol>.card{margin:13px 0}}
+</style>
+</head>
+
+<body>
+<main>
+<header>
+ <div>
+  <div class="tag">YOUR PERSONAL RESET</div>
+  <div class="brand">REVIVE</div>
+  <p class="sub">Build better days. Track real progress.</p>
+ </div>
+ <span class="pill">8 QUESTS · 80 XP</span>
+</header>
+
+<nav>
+ <button class="active" data-page="today">Today</button>
+ <button data-page="progress">Progress</button>
+ <button data-page="ranks">Rank journey</button>
+ <button data-page="history">History</button>
+ <button data-page="insights">Insights</button>
+</nav>
+
+<section class="page active" id="today">
+ <div class="card">
+  <div class="row">
+   <div>
+    <small id="dayLabel">TODAY'S CHECKLIST</small>
+    <h2 id="dateLabel" style="margin:4px 0">Loading date…</h2>
+   </div>
+   <span class="pill">RESET 6:00 AM</span>
+  </div>
+  <div class="row">
+   <div>
+    <div class="big" id="todayXP">0 XP</div>
+    <small id="todayCount">0 of 8 quests completed</small>
+   </div>
+   <span class="pill" id="todayRank">STARTER</span>
+  </div>
+  <div class="bar"><span id="todayBar"></span></div>
+  <div id="questList"></div>
+  <div class="actions">
+   <button id="saveBtn">Save today's progress</button>
+   <button class="secondary" id="clearBtn">Clear checks</button>
+  </div>
+  <p class="note">You can check in around midnight. The app changes to a fresh day at 6:00 AM. Your previous days remain in your history. A qualifying day is 50 XP or more.</p>
+ </div>
+
+ <div class="grid">
+  <div class="stat">
+   <small>YOUR CURRENT RANK</small>
+   <strong id="miniRank">🥉 BRONZE</strong>
+   <small id="rankSub">The Beginner</small>
+  </div>
+  <div class="stat">
+   <small>LIFETIME XP</small>
+   <strong id="totalXP">60</strong>
+   <small>All saved days combined</small>
+  </div>
+ </div>
+
+ <div class="card">
+  <h2>Quick reflection</h2>
+  <p class="note">What went well today? What will you improve tomorrow?</p>
+  <textarea id="reflection" placeholder="Write a small win or lesson…"></textarea>
+  <div class="actions">
+   <button class="secondary" id="saveNote">Save reflection</button>
+  </div>
+ </div>
+</section>
+
+<section class="page" id="progress">
+ <div class="card">
+  <div class="row">
+   <h2>📈 Progress overview</h2>
+   <select id="period">
+    <option value="week">This week</option>
+    <option value="month">This month</option>
+    <option value="all">All time</option>
+   </select>
+  </div>
+  <div class="grid">
+   <div class="stat"><small>AVERAGE XP / DAY</small><strong id="avgXP">—</strong></div>
+   <div class="stat"><small>QUEST COMPLETION</small><strong id="completion">—</strong></div>
+   <div class="stat"><small>QUALIFYING DAYS</small><strong id="qualDays">0</strong></div>
+   <div class="stat"><small>BEST DAY</small><strong id="bestDay">—</strong></div>
+  </div>
+  <h3 style="margin-top:20px">Daily XP trend</h3>
+  <div class="chart" id="trend"></div>
+  <p class="note" id="trendCaption">Save daily results to build your chart.</p>
+ </div>
+
+ <div class="card">
+  <h2>🗓️ Weekly report</h2>
+  <div class="tablewrap">
+   <table>
+    <thead><tr><th>Week</th><th>Average XP</th><th>Qualified</th><th>Total XP</th></tr></thead>
+    <tbody id="weeklyRows"></tbody>
+   </table>
+  </div>
+ </div>
+
+ <div class="card">
+  <h2>📅 Monthly report</h2>
+  <div class="tablewrap">
+   <table>
+    <thead><tr><th>Month</th><th>Average XP</th><th>Qualified days</th><th>Total XP</th></tr></thead>
+    <tbody id="monthlyRows"></tbody>
+   </table>
+  </div>
+ </div>
+</section>
+
+<section class="page" id="ranks">
+ <div class="card">
+  <small>YOUR CURRENT LEVEL</small>
+  <div class="row">
+   <h2 id="currentRank" style="font-size:1.6rem;margin:5px 0">🥉 BRONZE</h2>
+   <span class="pill" id="qualCount">1 qualifying day</span>
+  </div>
+  <div class="bar"><span id="rankProgress"></span></div>
+  <p class="note" id="nextRankText">6 more qualifying days to Silver.</p>
+ </div>
+
+ <div class="card">
+  <h2>🏆 The road to CONQUER</h2>
+  <div id="rankList"></div>
+ </div>
+
+ <div class="card">
+  <h2>How ranks work</h2>
+  <p class="note">A qualifying day means 50 XP or more. Ranks are based on your total qualifying days, not an unbroken streak. Missed days do not erase your progress.</p>
+ </div>
+</section>
+
+<section class="page" id="history">
+ <div class="card">
+  <div class="row">
+   <h2>📚 Daily history</h2>
+   <button class="secondary" id="exportBtn">Export CSV</button>
+  </div>
+  <div class="tablewrap">
+   <table>
+    <thead><tr><th>Date</th><th>XP</th><th>Rank</th><th>Quests</th></tr></thead>
+    <tbody id="historyRows"></tbody>
+   </table>
+  </div>
+  <p class="note">Your record is saved in this browser on this device.</p>
+ </div>
+</section>
+
+<section class="page" id="insights">
+ <div class="card">
+  <h2>🧭 Habit insights</h2>
+  <p class="note">See which quests you complete most often and which ones need more attention.</p>
+  <div id="habitInsights"></div>
+ </div>
+
+ <div class="card">
+  <h2>🌱 REVIVE principles</h2>
+  <p class="note">Progress over perfection. Rest is part of training. One missed quest does not cancel your effort. Focus on habits that support your health and wellbeing.</p>
+ </div>
+
+ <div class="card">
+  <h2>Data controls</h2>
+  <button class="secondary" id="resetData">Reset all app data</button>
+  <p class="note">This permanently clears saved check-ins and reflections from this browser.</p>
+ </div>
+</section>
+</main>
+
+<script>
+const QUESTS=[
+["1. Self-control & mindful choices","Practise choices and boundaries that support your goals."],
+["2. Regular balanced meals & hydration","Eat regularly and drink water; no fasting or skipped meals."],
+["3. Resistance training OR planned recovery","Train safely, or count a planned recovery day."],
+["4. Walking / enjoyable daily movement","Choose comfortable movement you enjoy."],
+["5. Protein + healthy fats","Include nourishing sources in balanced meals."],
+["6. Sleep 8–10 hours","Give your body enough time to rest and grow."],
+["7. Safe outdoor time","Enjoy outdoors safely; avoid sunburn and use protection."],
+["8. Mostly nourishing foods","Choose nourishing foods often; treats are okay too."]
+];
+
+const LEVELS=[
+["🥉","BRONZE","The Beginner",1],
+["🥈","SILVER","The Disciplined",7],
+["🥇","GOLD","The Consistent",14],
+["💎","PLATINUM","The Dedicated",21],
+["🔥","DIAMOND","The Unstoppable",30],
+["👑","MASTER","The Warrior",60],
+["⚔️","CONQUER","The Champion",90]
+];
+
+const $=id=>document.getElementById(id);
+const STORE="reviveAppDataV1";
+
+let db=JSON.parse(localStorage.getItem(STORE)||'{"days":{},"notes":{}}');
+if(!db.days)db={days:{},notes:{}};
+
+// Preserve the existing saved data and original first check-in.
+if(!db.days["2026-11-05"])db.days["2026-11-05"]={checks:[true,false,true,true,true,false,true,true],done:6,xp:60};
+
+let checks=Array(8).fill(false);
+
+function appDay(date=new Date()){
+ let d=new Date(date);
+ if(d.getHours()<6)d.setDate(d.getDate()-1);
+ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+
+function dateObj(key){
+ let [y,m,d]=key.split("-").map(Number);
+ return new Date(y,m-1,d,12);
+}
+
+function fmt(key,opts={weekday:"short",day:"numeric",month:"short"}){
+ return dateObj(key).toLocaleDateString(undefined,opts);
+}
+
+function persist(){
+ localStorage.setItem(STORE,JSON.stringify(db));
+}
+
+function currentEntries(){
+ return Object.entries(db.days)
+ .map(([date,v])=>({date,...v}))
+ .sort((a,b)=>a.date.localeCompare(b.date));
+}
+
+function rankFor(n){
+ let r=LEVELS[0];
+ LEVELS.forEach(x=>{if(n>=x[3])r=x});
+ return r;
+}
+
+function dailyRank(x){
+ return x>=70?"GOLD 🥇":x>=50?"SILVER 🥈":x>=30?"BRONZE 🥉":"STARTER";
+}
+
+function renderQuests(){
+ let root=$("questList");
+ root.innerHTML="";
+ QUESTS.forEach((q,i)=>{
+  let label=document.createElement("label");
+  label.className="quest";
+  let cb=document.createElement("input");
+  cb.type="checkbox";
+  cb.checked=checks[i];
+  cb.addEventListener("change",()=>{
+   checks[i]=cb.checked;
+   renderToday();
+  });
+  let text=document.createElement("div");
+  let b=document.createElement("strong");
+  let s=document.createElement("small");
+  b.textContent=q[0];
+  s.textContent=q[1];
+  text.append(b,s);
+  label.append(cb,text);
+  root.append(label);
+ });
+}
+
+function renderToday(){
+ let xp=checks.filter(Boolean).length*10;
+ $("todayXP").textContent=xp+" XP";
+ $("todayCount").textContent=checks.filter(Boolean).length+" of 8 quests completed";
+ $("todayRank").textContent=dailyRank(xp);
+ $("todayBar").style.width=xp/80*100+"%";
+}
+
+function loadToday(){
+ let key=appDay();
+ $("dateLabel").textContent=fmt(key,{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+ let saved=db.days[key];
+ checks=saved?saved.checks.slice():Array(8).fill(false);
+ $("reflection").value=db.notes[key]||"";
+ renderQuests();
+ renderToday();
+}
+
+function renderGlobal(){
+ let entries=currentEntries();
+ let qualified=entries.filter(e=>e.xp>=50).length;
+ let rank=rankFor(qualified);
+ let total=entries.reduce((s,e)=>s+e.xp,0);
+
+ $("miniRank").textContent=rank[0]+" "+rank[1];
+ $("rankSub").textContent=rank[2];
+ $("totalXP").textContent=total;
+ $("currentRank").textContent=rank[0]+" "+rank[1];
+ $("qualCount").textContent=qualified+" qualifying days";
+
+ let next=LEVELS.find(x=>x[3]>qualified);
+ $("rankProgress").style.width=Math.min(100,qualified/90*100)+"%";
+ $("nextRankText").textContent=next?(next[3]-qualified)+" more qualifying days to "+next[1]+".":"You have reached CONQUER!";
+
+ $("rankList").innerHTML=LEVELS.map(l=>
+ `<div class="rankrow">
+  <span class="medal">${l[0]}</span>
+  <div><b>${l[1]} — ${l[2]}</b><small>${l[3]} qualifying days</small></div>
+  ${qualified>=l[3]?'<span class="pill" style="margin-left:auto">UNLOCKED</span>':''}
+ </div>`
+ ).join("");
+
+ $("historyRows").innerHTML=entries.length?
+ entries.slice().reverse().map(e=>
+ `<tr>
+  <td>${fmt(e.date,{day:"numeric",month:"short",year:"numeric"})}</td>
+  <td>${e.xp}/80</td>
+  <td>${dailyRank(e.xp)}</td>
+  <td>${e.done}/8</td>
+ </tr>`
+ ).join("")
+ :'<tr><td colspan="4" class="empty">No check-ins saved yet.</td></tr>';
+
+ renderInsights(entries);
+ renderAnalytics(entries);
+}
+
+function renderInsights(entries){
+ $("habitInsights").innerHTML=QUESTS.map((q,i)=>{
+  let done=entries.filter(e=>e.checks?.[i]).length;
+  let pct=entries.length?Math.round(done/entries.length*100):0;
+  return `<div style="margin:13px 0">
+   <div class="row"><b>${q[0]}</b><small>${pct}% · ${done}/${entries.length}</small></div>
+   <div class="bar"><span style="width:${pct}%"></span></div>
+  </div>`;
+ }).join("");
+}
+
+function renderAnalytics(entries){
+ let period=$("period").value;
+ let nowKey=appDay();
+ let now=dateObj(nowKey);
+ let filtered=entries;
+
+ if(period==="week"){
+  let start=new Date(now);
+  start.setDate(now.getDate()-((now.getDay()+6)%7));
+  filtered=entries.filter(e=>dateObj(e.date)>=start&&dateObj(e.date)<=now);
+ }
+
+ if(period==="month"){
+  filtered=entries.filter(e=>e.date.slice(0,7)===nowKey.slice(0,7));
+ }
+
+ let sum=filtered.reduce((s,e)=>s+e.xp,0);
+ let attempts=filtered.length*8;
+ let done=filtered.reduce((s,e)=>s+e.done,0);
+
+ $("avgXP").textContent=filtered.length?Math.round(sum/filtered.length):"—";
+ $("completion").textContent=attempts?Math.round(done/attempts*100)+"%":"—";
+ $("qualDays").textContent=filtered.filter(e=>e.xp>=50).length;
+ $("bestDay").textContent=filtered.length?Math.max(...filtered.map(e=>e.xp))+" XP":"—";
+
+ let last=filtered.slice(-7);
+ $("trend").innerHTML=last.length?
+ last.map(e=>`<div class="barcol">
+  <small>${e.xp}</small>
+  <span style="height:${Math.max(2,e.xp/80*100)}%"></span>
+  <small>${fmt(e.date,{day:"numeric",month:"short"})}</small>
+ </div>`).join("")
+ :'<div class="empty">Your chart will appear after check-ins.</div>';
+
+ $("trendCaption").textContent=last.length?
+ "Showing up to the latest 7 saved days in this period."
+ :"Save daily results to build your chart.";
+
+ let weeks={};
+ entries.forEach(e=>{
+  let d=dateObj(e.date);
+  let monday=new Date(d);
+  monday.setDate(d.getDate()-((d.getDay()+6)%7));
+  let k=monday.toISOString().slice(0,10);
+  (weeks[k]??=[]).push(e);
+ });
+
+ $("weeklyRows").innerHTML=Object.entries(weeks).slice(-8).reverse().map(([k,a])=>
+ `<tr>
+  <td>${fmt(k,{day:"numeric",month:"short"})}</td>
+  <td>${Math.round(a.reduce((s,e)=>s+e.xp,0)/a.length)}</td>
+  <td>${a.filter(e=>e.xp>=50).length}/${a.length}</td>
+  <td>${a.reduce((s,e)=>s+e.xp,0)}</td>
+ </tr>`
+ ).join("")||'<tr><td colspan="4">No weekly data yet.</td></tr>';
+
+ let months={};
+ entries.forEach(e=>(months[e.date.slice(0,7)]??=[]).push(e));
+
+ $("monthlyRows").innerHTML=Object.entries(months).slice(-12).reverse().map(([k,a])=>
+ `<tr>
+  <td>${dateObj(k+"-01").toLocaleDateString(undefined,{month:"long",year:"numeric"})}</td>
+  <td>${Math.round(a.reduce((s,e)=>s+e.xp,0)/a.length)}</td>
+  <td>${a.filter(e=>e.xp>=50).length}/${a.length}</td>
+  <td>${a.reduce((s,e)=>s+e.xp,0)}</td>
+ </tr>`
+ ).join("")||'<tr><td colspan="4">No monthly data yet.</td></tr>';
+}
+
+$("saveBtn").onclick=()=>{
+ let key=appDay();
+ let done=checks.filter(Boolean).length;
+ db.days[key]={checks:checks.slice(),done,xp:done*10};
+ persist();
+ renderGlobal();
+ alert("REVIVE saved: "+done+"/8 quests · "+done*10+" XP");
+};
+
+$("clearBtn").onclick=()=>{
+ checks=Array(8).fill(false);
+ renderQuests();
+ renderToday();
+};
+
+$("saveNote").onclick=()=>{
+ db.notes[appDay()]=$("reflection").value;
+ persist();
+ alert("Reflection saved.");
+};
+
+$("period").onchange=()=>renderAnalytics(currentEntries());
+
+$("exportBtn").onclick=()=>{
+ let rows=[["Date","Completed quests","XP"],...currentEntries().map(e=>[e.date,e.done,e.xp])];
+ let csv=rows.map(r=>r.join(",")).join("\n");
+ let a=document.createElement("a");
+ a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
+ a.download="revive-progress.csv";
+ a.click();
+ URL.revokeObjectURL(a.href);
+};
+
+$("resetData").onclick=()=>{
+ if(confirm("Delete all REVIVE check-ins and reflections from this browser?")){
+  db={days:{},notes:{}};
+  persist();
+  loadToday();
+  renderGlobal();
+ }
+};
+
+document.querySelectorAll("nav button").forEach(b=>{
+ b.onclick=()=>{
+  document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("active",x===b));
+  document.querySelectorAll("section.page").forEach(x=>x.classList.toggle("active",x.id===b.dataset.page));
+  if(b.dataset.page==="progress")renderAnalytics(currentEntries());
+ };
+});
+
+loadToday();
+renderGlobal();
+
+// Refresh the active date when the clock crosses the 6 AM boundary.
+let lastDay=appDay();
+setInterval(()=>{
+ let d=appDay();
+ if(d!==lastDay){
+  lastDay=d;
+  loadToday();
+  renderGlobal();
+ }
+},30000);
+
+document.addEventListener("visibilitychange",()=>{
+ if(!document.hidden&&appDay()!==lastDay){
+  lastDay=appDay();
+  loadToday();
+  renderGlobal();
+ }
+});
+
+// Register REVIVE's offline service worker.
+if("serviceWorker" in navigator){
+ window.addEventListener("load",()=>{
+  navigator.serviceWorker.register("./service-worker.js")
+   .catch(error=>console.log("Service worker:",error));
+ });
+}
+</script>
+</body>
+  </html>
+  
